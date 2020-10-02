@@ -13,7 +13,7 @@ import com.example.demo.shared.dto.UserDto;
 public class UserServiceImpl implements UserService {
 	
 	@Autowired
-	UserRepository userRepository;
+	 UserRepository userRepository;
 
 	@Override
 	public UserDto createUser(UserDto user) {
