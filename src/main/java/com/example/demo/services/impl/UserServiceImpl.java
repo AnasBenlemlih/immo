@@ -3,6 +3,7 @@ package com.example.demo.services.impl;
 
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import com.example.demo.Repository.UserRepository;
@@ -20,6 +21,8 @@ public class UserServiceImpl implements UserService {
 	@Autowired
 	Utils util;
 	
+	@Autowired
+	BCryptPasswordEncoder bCryptPasswordEncoder;
 	
 	
 
@@ -34,7 +37,7 @@ public class UserServiceImpl implements UserService {
 		
 		BeanUtils.copyProperties(user, userEntity);
 		
-		userEntity.setEncryptePassword("hbkdbdsbfhrbhskdfb");
+		userEntity.setEncryptePassword(bCryptPasswordEncoder.encode(user.getPassword()));
 		
 		userEntity.setUserId(util.generateUserId(32));
 		
