@@ -10,5 +10,5 @@ import com.example.demo.entities.UserEntity;
 public interface UserRepository extends CrudRepository<UserEntity, Long> {
 	
 	
-
+	UserEntity findByEmail(String email);
 }
