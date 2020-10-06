@@ -1,8 +1,13 @@
 package com.example.demo.services.impl;
 
 
+import java.util.ArrayList;
+
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.userdetails.User;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -48,6 +53,18 @@ public class UserServiceImpl implements UserService {
 		
 		
 		return userDto;
+	}
+
+
+
+	@Override
+	public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
+
+		UserEntity userEntity =  userRepository.findByEmail(email);
+		
+		if (userEntity == null ) throw new UsernameNotFoundException(email); 
+			
+		return new User(userEntity.getEmail(),userEntity.getEncryptePassword(),new ArrayList<>());
 	}
 
 }
