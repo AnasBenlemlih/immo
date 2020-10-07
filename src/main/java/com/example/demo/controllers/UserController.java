@@ -55,7 +55,7 @@ public class UserController {
 		
 	}
 	
-	@PutMapping(path="/{id}" )
+	@PutMapping(path="/{id}")
 	public UserResponse updatetUser(@PathVariable String id,@RequestBody UserRequest userRequest) {
 		
 		
@@ -75,9 +75,11 @@ public class UserController {
 		return userResponse;
 	}
 	
-	@DeleteMapping
-	public String deleteUser() {
-		return "delete user was 	called";
+	@DeleteMapping(path="/{id}")
+	public String deleteUser(@PathVariable String id) {
+		
+		userService.deleteUser(id);
+		return "delete user : "+id;
 	}
 
 }
