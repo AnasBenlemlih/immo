@@ -2,6 +2,8 @@ package com.example.demo.controllers;
 
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -17,69 +19,62 @@ import com.example.demo.services.UserService;
 import com.example.demo.shared.dto.UserDto;
 
 @RestController
-@RequestMapping("/users") 
+@RequestMapping("/users")
 public class UserController {
-	
+
 	@Autowired
 	UserService userService;
-	
-	@GetMapping(path="/{id}")
-	public UserResponse getUser(@PathVariable String id) {
-		
+
+	@GetMapping(path = "/{id}")
+	public ResponseEntity<UserResponse> getUser(@PathVariable String id) {
+
 		UserDto userDto = userService.getUserByUserId(id);
-		
-		UserResponse userResponse = new  UserResponse();
-		
+
+		UserResponse userResponse = new UserResponse();
+
 		BeanUtils.copyProperties(userDto, userResponse);
-		
-		return userResponse;
+
+		return new ResponseEntity<UserResponse>(userResponse, HttpStatus.OK);
 	}
-	
+
 	@PostMapping
-	public UserResponse addtUser(@RequestBody UserRequest userRequest) {
-		
+	public ResponseEntity<UserResponse> addtUser(@RequestBody UserRequest userRequest) {
+
 		UserDto userDto = new UserDto();
-		
+
 		BeanUtils.copyProperties(userRequest, userDto);
-		
+
 		UserDto createUser = userService.createUser(userDto);
-		
+
 		UserResponse userResponse = new UserResponse();
-		
-		
-		
+
 		BeanUtils.copyProperties(createUser, userResponse);
-		
-		return userResponse;
- 
-		
+
+		return new ResponseEntity<UserResponse>(userResponse, HttpStatus.CREATED);
+
 	}
-	
-	@PutMapping(path="/{id}")
-	public UserResponse updatetUser(@PathVariable String id,@RequestBody UserRequest userRequest) {
-		
-		
-		
-		 UserDto userDto = new UserDto();
-		
+
+	@PutMapping(path = "/{id}")
+	public ResponseEntity<UserResponse> updatetUser(@PathVariable String id, @RequestBody UserRequest userRequest) {
+
+		UserDto userDto = new UserDto();
+
 		BeanUtils.copyProperties(userRequest, userDto);
-		
+
 		UserDto updateUser = userService.updateUser(id, userDto);
-		
+
 		UserResponse userResponse = new UserResponse();
-		
-		
-		
+
 		BeanUtils.copyProperties(updateUser, userResponse);
-		
-		return userResponse;
+
+		return new ResponseEntity<UserResponse>(userResponse, HttpStatus.ACCEPTED);
 	}
-	
-	@DeleteMapping(path="/{id}")
-	public String deleteUser(@PathVariable String id) {
-		
+
+	@DeleteMapping(path = "/{id}")
+	public ResponseEntity<Object> deleteUser(@PathVariable String id) {
+
 		userService.deleteUser(id);
-		return "delete user : "+id;
+		return new ResponseEntity<>(HttpStatus.NO_CONTENT);
 	}
 
 }
