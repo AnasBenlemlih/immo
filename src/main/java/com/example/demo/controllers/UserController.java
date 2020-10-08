@@ -13,7 +13,9 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.example.demo.Exceptions.UserException;
 import com.example.demo.requests.UserRequest;
+import com.example.demo.responses.ErreurMessages;
 import com.example.demo.responses.UserResponse;
 import com.example.demo.services.UserService;
 import com.example.demo.shared.dto.UserDto;
@@ -26,7 +28,7 @@ public class UserController {
 	UserService userService;
 
 	@GetMapping(path = "/{id}")
-	public ResponseEntity<UserResponse> getUser(@PathVariable String id) {
+	public ResponseEntity<UserResponse> getUser(@PathVariable String id) throws Exception {
 
 		UserDto userDto = userService.getUserByUserId(id);
 
@@ -38,7 +40,9 @@ public class UserController {
 	}
 
 	@PostMapping
-	public ResponseEntity<UserResponse> addtUser(@RequestBody UserRequest userRequest) {
+	public ResponseEntity<UserResponse> addtUser(@RequestBody UserRequest userRequest) throws Exception {
+		
+		if(userRequest.getFirstName().isEmpty()) throw new UserException(ErreurMessages.MISSING_REQUIRED_FIELD.getErrorMessage());
 
 		UserDto userDto = new UserDto();
 
@@ -55,7 +59,7 @@ public class UserController {
 	}
 
 	@PutMapping(path = "/{id}")
-	public ResponseEntity<UserResponse> updatetUser(@PathVariable String id, @RequestBody UserRequest userRequest) {
+	public ResponseEntity<UserResponse> updatetUser(@PathVariable String id, @RequestBody UserRequest userRequest) throws Exception {
 
 		UserDto userDto = new UserDto();
 
@@ -71,7 +75,7 @@ public class UserController {
 	}
 
 	@DeleteMapping(path = "/{id}")
-	public ResponseEntity<Object> deleteUser(@PathVariable String id) {
+	public ResponseEntity<Object> deleteUser(@PathVariable String id) throws Exception {
 
 		userService.deleteUser(id);
 		return new ResponseEntity<>(HttpStatus.NO_CONTENT);
