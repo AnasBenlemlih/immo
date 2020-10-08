@@ -3,6 +3,8 @@ package com.example.demo.controllers;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.validation.Valid;
+
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -62,8 +64,10 @@ public class UserController {
 	}
 	
 
-	@PostMapping
-	public ResponseEntity<UserResponse> addtUser(@RequestBody UserRequest userRequest) throws Exception {
+	@PostMapping(consumes ={MediaType.APPLICATION_XML_VALUE,MediaType.APPLICATION_JSON_VALUE}, 
+			produces = {MediaType.APPLICATION_XML_VALUE,MediaType.APPLICATION_JSON_VALUE}
+		)
+	public ResponseEntity<UserResponse> addtUser(@Valid @RequestBody UserRequest userRequest) throws Exception {
 		
 		if(userRequest.getFirstName().isEmpty()) throw new UserException(ErreurMessages.MISSING_REQUIRED_FIELD.getErrorMessage());
 
